@@ -1,0 +1,12 @@
+# VS Code local settings
+.vscode/
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# macOS system files
+.DS_Store
+
+# Log files
+*.log
