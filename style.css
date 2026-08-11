@@ -1,0 +1,2555 @@
+/* ================================================================
+   LOCAL FONTS
+   අන්තර්ජාලය නොමැතිවත් site එකේ fonts වැඩ කිරීමට local files භාවිතා කරයි.
+   ================================================================ */
+@font-face {
+  font-family: "Manrope";
+  src: url("assets/fonts/manrope-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("assets/fonts/poppins-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("assets/fonts/manrope-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("assets/fonts/manrope-700.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("assets/fonts/manrope-800.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("assets/fonts/roboto-300.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("assets/fonts/roboto-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("assets/fonts/roboto-500.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("assets/fonts/roboto-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+/* Site එක පුරා නැවත භාවිතා වන ප්‍රධාන වර්ණ සහ animation values. */
+:root {
+  --ink: #121216;
+  --ink-deep: #0f0f12;
+  --surface: #292929;
+  --surface-soft: rgba(41, 41, 41, 0.8);
+  --surface-glass: rgba(38, 37, 38, 0.8);
+  --orange: #fd7c1c;
+  --orange-soft: #ff8b3b;
+  --gold: #fcb52d;
+  --cream: #fffbf2;
+  --muted: #b4b4b4;
+  --white: #ffffff;
+  --canvas: 1440px;
+  --spring: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* සියලු elements වල size ගණනය සරල කරන global reset එක. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+  background: var(--ink);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  color: var(--white);
+  background: var(--ink);
+  font-family: "Roboto", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.menu-locked {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* ================================================================
+   FIXED NAVIGATION BAR
+   Scroll කළත් navigation bar එක viewport එකේ ඉහළින්ම තබයි.
+   ================================================================ */
+.site-header {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 82px;
+  border-top: 1px solid rgba(253, 124, 28, 0.72);
+  background:
+    linear-gradient(90deg, rgba(24, 15, 16, 0.97), rgba(73, 27, 12, 0.96) 50%, rgba(24, 15, 16, 0.97));
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-22px);
+  transition:
+    opacity 0.82s ease,
+    background 220ms ease,
+    box-shadow 220ms ease,
+    transform 1.05s var(--spring);
+  transition-delay: 0.35s;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.site-header.is-loaded {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.site-header.is-scrolled {
+  background:
+    linear-gradient(90deg, rgba(18, 14, 16, 0.98), rgba(61, 23, 12, 0.97) 50%, rgba(18, 14, 16, 0.98));
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.42);
+}
+
+.site-header-inner {
+  position: relative;
+  width: min(calc(100% - 112px), 1720px);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   HERO SECTION — DESKTOP BASE DESIGN
+   Figma 1440px frame එක අනුව hero elements absolute position කර ඇත.
+   ================================================================ */
+.hero {
+  --hero-display-height: 1024px;
+  --hero-left-shift: 0px;
+  --hero-name-scale: 1;
+  --hero-name-width-scale: 1;
+  --hero-right-shift: 0px;
+  --hero-stage-scale: 1;
+
+  position: relative;
+  width: 100%;
+  height: var(--hero-display-height);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 106%, rgba(253, 240, 187, 0.96) 0 8%, rgba(252, 181, 45, 0.88) 19%, rgba(253, 124, 28, 0.74) 40%, rgba(183, 16, 1, 0.56) 67%, rgba(18, 18, 22, 0) 96%),
+    #121216;
+}
+
+.hero-stage {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1440px;
+  height: 1024px;
+  transform: translateX(-50%) scale(var(--hero-stage-scale));
+  transform-origin: top center;
+}
+
+.hero-aurora {
+  position: absolute;
+  z-index: -2;
+  top: 178px;
+  left: 50%;
+  width: min(1500px, 112vw);
+  height: 994px;
+  border-radius: 46% 46% 28% 28%;
+  background:
+    radial-gradient(circle at 50% 82%, #fdf0bb 0 14%, #fcb52d 27%, #fd7c1c 54%, #b71001 83%, rgba(183, 16, 1, 0) 100%);
+  filter: blur(100px);
+  opacity: 0.98;
+  transform: translateX(-50%);
+}
+
+/* Hero එක load වන විට භාවිතා වන එකම smooth transition timing එක. */
+.hero-motion {
+  transition:
+    opacity 0.82s ease,
+    transform 1.278s var(--spring);
+  transition-delay: 0.35s;
+}
+
+.hero-brand {
+  position: absolute;
+  z-index: 2;
+  top: 26px;
+  left: 0;
+  width: 60px;
+  height: 30px;
+  overflow: hidden;
+}
+
+.hero-brand img,
+.footer-brand > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-nav {
+  position: absolute;
+  z-index: 2;
+  top: 19px;
+  left: 50%;
+  display: grid;
+  width: 707px;
+  height: 44px;
+  padding: 4px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  border: 1px solid rgba(255, 139, 58, 0.24);
+  border-radius: 13px;
+  background: rgba(20, 13, 15, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transform: translateX(-50%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.hero-nav a {
+  display: grid;
+  width: 100%;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 244, 227, 0.035);
+  border-radius: 9px;
+  color: var(--white);
+  background: rgba(255, 149, 112, 0.11);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.hero-nav a:hover,
+.hero-nav a.active {
+  background: rgba(253, 124, 28, 0.34);
+  transform: translateY(-1px);
+}
+
+.hero-contact {
+  position: absolute;
+  z-index: 2;
+  top: 22px;
+  right: 0;
+  display: grid;
+  width: 116px;
+  height: 38px;
+  place-items: center;
+  border-radius: 9px;
+  color: #000;
+  background: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.hero-contact:hover {
+  color: var(--white);
+  background: #191919;
+  transform: translateY(-2px);
+}
+
+.menu-toggle {
+  display: none;
+}
+
+/* Profile image එක මුලින් පහළින් සිට load animation එකෙන් ඉහළට එයි. */
+.hero-profile {
+  position: absolute;
+  z-index: 2;
+  top: 125px;
+  left: calc(50% - 366px);
+  width: 733px;
+  height: 915px;
+  max-width: none;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(221px);
+}
+
+.hero-title {
+  position: absolute;
+  z-index: 5;
+  top: 410px;
+  left: max(90px, calc(50% - 630px));
+  width: 471px;
+  opacity: 0;
+  transform: translateX(calc(-349px + var(--hero-left-shift)));
+}
+
+.hero-pill {
+  display: inline-grid;
+  width: 208px;
+  height: 26px;
+  margin: 0 0 2px;
+  place-items: center;
+  border-radius: 104px;
+  color: var(--white);
+  background: linear-gradient(90deg, var(--orange), var(--gold));
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.hero-title h1 {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  color: var(--white);
+  font-family: "Manrope", sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  line-height: 58px;
+}
+
+.hero-title h1 strong {
+  font-weight: 800;
+}
+
+.hero-copy {
+  position: absolute;
+  z-index: 5;
+  top: 410px;
+  right: max(92px, calc(50% - 628px));
+  width: 423px;
+  opacity: 0;
+  transform: translateX(calc(438px + var(--hero-right-shift)));
+}
+
+.hero-copy > p {
+  height: 96px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  margin-top: 27px;
+  gap: 27px;
+}
+
+.button {
+  display: grid;
+  width: 198px;
+  height: 59px;
+  place-items: center;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-3px);
+}
+
+.button-light {
+  color: #191919;
+  background: linear-gradient(90deg, #fff, #b4b4b4);
+}
+
+.button-dark {
+  color: #b4b4b4;
+  background: #191919;
+}
+
+/* Profile image එක මත ඇති විශාල “Nuwantha” නම. */
+.hero-name {
+  position: absolute;
+  z-index: 4;
+  top: 716px;
+  left: calc(50% - 660px);
+  width: 1320px;
+  height: 206px;
+  overflow: hidden;
+  color: transparent;
+  background: linear-gradient(90deg, #fff 58%, #b4b4b4 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: "Poppins", sans-serif;
+  font-size: 260px;
+  font-weight: 600;
+  letter-spacing: -8px;
+  line-height: 0.8;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(0, 212px) scale(var(--hero-name-scale)) scaleX(var(--hero-name-width-scale));
+  transform-origin: center;
+}
+
+.hero.is-loaded .hero-profile {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.hero.is-loaded .hero-title {
+  opacity: 1;
+  transform: translateX(var(--hero-left-shift));
+}
+
+.hero.is-loaded .hero-copy {
+  opacity: 1;
+  transform: translateX(var(--hero-right-shift));
+}
+
+.hero.is-loaded .hero-name {
+  opacity: 1;
+  transform: translate(0, 0) scale(var(--hero-name-scale)) scaleX(var(--hero-name-width-scale));
+}
+
+/* ================================================================
+   COMMON SECTION STYLES
+   සියලු content sections වල background සහ spacing consistency මෙතැනින් පාලනය වේ.
+   ================================================================ */
+.section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ink);
+}
+
+.about-section,
+.skills-section,
+.projects-section,
+.experience-section,
+.contact-section {
+  height: auto;
+  min-height: 0;
+  padding-bottom: 80px;
+}
+
+/* About Me section එකේ desktop spacing. */
+.about-section {
+  padding-top: 80px;
+}
+
+.ambient {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(253, 124, 28, 0.14);
+  filter: blur(220px);
+  pointer-events: none;
+}
+
+.ambient-about-left {
+  top: -182px;
+  left: -165px;
+  width: 613px;
+  height: 613px;
+  opacity: 0.9;
+}
+
+.ambient-about-right {
+  right: -346px;
+  bottom: -140px;
+  width: 757px;
+  height: 757px;
+  opacity: 0.62;
+}
+
+.ambient-skills {
+  right: -80px;
+  top: 470px;
+  width: 520px;
+  height: 520px;
+  opacity: 0.56;
+  filter: blur(360px);
+}
+
+.ambient-projects {
+  left: -290px;
+  top: 100px;
+  width: 780px;
+  height: 730px;
+  opacity: 0.5;
+  filter: blur(360px);
+}
+
+.ambient-experience-left {
+  left: -135px;
+  bottom: -155px;
+  width: 520px;
+  height: 520px;
+  opacity: 0.5;
+  filter: blur(340px);
+}
+
+.ambient-experience-right {
+  right: -290px;
+  top: 235px;
+  width: 780px;
+  height: 730px;
+  opacity: 0.46;
+  filter: blur(380px);
+}
+
+.ambient-contact {
+  left: 50%;
+  bottom: -260px;
+  width: 1200px;
+  height: 440px;
+  background: rgba(253, 124, 28, 0.32);
+  filter: blur(240px);
+  transform: translateX(-50%);
+}
+
+/* සෑම section එකකම භාවිතා වන orange label සහ ප්‍රධාන title style එක. */
+.section-heading {
+  text-align: center;
+}
+
+.section-heading > p {
+  height: 26px;
+  margin: 0;
+  color: var(--orange-soft);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+.section-heading > h2 {
+  height: 48px;
+  margin: 4px 0 0;
+  color: var(--white);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 48px;
+}
+
+.about-content {
+  width: 1055px;
+  margin: 0 auto;
+  padding-top: 0;
+}
+
+.about-copy {
+  display: flex;
+  width: 1055px;
+  height: 192px;
+  margin: 64px 0 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 29px;
+  text-align: center;
+}
+
+.education-card {
+  display: flex;
+  width: 1046px;
+  height: 141px;
+  margin: 54px auto 0;
+  padding: 34px 35px;
+  align-items: center;
+  border-radius: 23px;
+  background: var(--surface);
+}
+
+.education-icon {
+  display: grid;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  margin-right: 58px;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--orange), #b33001);
+}
+
+.education-icon img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.education-card h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+}
+
+.education-card p {
+  margin: 8px 0 0;
+  color: var(--white);
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.certificate-track {
+  display: grid;
+  grid-template-columns: repeat(2, 502px);
+  width: 1046px;
+  margin: 38px auto 0;
+  gap: 42px;
+}
+
+.certificate-card {
+  display: flex;
+  height: 141px;
+  padding: 23px;
+  align-items: center;
+  border-radius: 23px;
+  background: var(--surface);
+}
+
+.certificate-icon {
+  flex: 0 0 95px;
+  width: 95px;
+  height: 95px;
+  margin-right: 19px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #d9d9d9;
+}
+
+.certificate-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.google-icon img {
+  padding: 10px;
+  object-fit: contain;
+}
+
+.certificate-card h3 {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.certificate-card p {
+  margin: 6px 0 0;
+  color: var(--white);
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.carousel-control {
+  display: flex;
+  width: 173px;
+  height: 44px;
+  margin: 31px auto 0;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+}
+
+.carousel-control button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  background: #2b2b2d;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.carousel-control button:hover {
+  color: var(--white);
+  background: var(--orange);
+  transform: scale(1.08);
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.carousel-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #636366;
+  transition: width 180ms ease, background 180ms ease;
+}
+
+.carousel-dots span.active {
+  width: 7px;
+  height: 7px;
+  background: var(--orange);
+}
+
+/* ================================================================
+   SKILLS සහ TOOLS
+   Cards තුන සහ නතර නොවන horizontal tool marquee එක මෙහි ඇත.
+   ================================================================ */
+.skills-section {
+  padding-top: 80px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 300px);
+  width: 1046px;
+  margin: 87px auto 0;
+  gap: 73px;
+}
+
+.skill-card {
+  position: relative;
+  display: flex;
+  width: 300px;
+  height: 357px;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(255, 251, 242, 0.11);
+  border-radius: 27px;
+  background: rgba(41, 41, 41, 0.8);
+  box-shadow: inset 0 0 44px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+}
+
+.skill-icon {
+  display: grid;
+  width: 107px;
+  height: 107px;
+  margin-top: 38px;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(83, 82, 83, 0.82);
+}
+
+.skill-icon img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.skill-card h3 {
+  margin: 28px 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+}
+
+.skill-card p {
+  margin: 8px 6px 0;
+  color: var(--muted);
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+}
+
+.skill-card em {
+  color: var(--orange);
+  font-style: normal;
+}
+
+/* JavaScript මගින් scrollLeft වෙනස් කර tool logos auto-scroll කරයි. */
+.tool-marquee {
+  width: 100%;
+  margin: 96px auto 0;
+  overflow-x: auto;
+  cursor: grab;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.tool-marquee::-webkit-scrollbar {
+  display: none;
+}
+
+.tool-marquee.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.tool-marquee-track {
+  display: flex;
+  width: max-content;
+  padding: 0 64px;
+  gap: 64px;
+}
+
+.tool-set {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 64px;
+}
+
+.tool-chip {
+  display: grid;
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(38, 37, 38, 0.6);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.tool-chip:hover {
+  background: rgba(61, 59, 61, 0.8);
+  transform: translateY(-7px);
+}
+
+.tool-chip img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* ================================================================
+   PROJECTS CAROUSEL
+   Desktop එකේ cards පේළියක්, mobile එකේ horizontal swipe carousel එකක් වේ.
+   ================================================================ */
+.projects-section {
+  padding-top: 80px;
+}
+
+.project-track {
+  display: flex;
+  width: 1260px;
+  margin: 89px auto 0;
+  gap: 29.5px;
+}
+
+.project-card {
+  position: relative;
+  flex: 0 0 400px;
+  width: 400px;
+  height: 426px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 41px;
+  background: linear-gradient(145deg, #414145, #29292c);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.project-card::before {
+  position: absolute;
+  z-index: 0;
+  inset: 9px;
+  border-radius: 35px;
+  background: #151515;
+  content: "";
+}
+
+.project-image {
+  position: absolute;
+  z-index: 1;
+  top: 9px;
+  left: 9px;
+  width: 380px;
+  height: 237px;
+  border-radius: 35px;
+  object-fit: cover;
+}
+
+.project-panel {
+  position: absolute;
+  z-index: 2;
+  top: 184px;
+  left: 9px;
+  width: 380px;
+  height: 233px;
+  border-radius: 0 0 35px 35px;
+  background: #161616;
+  clip-path: polygon(0 0, 51% 0, 61% 13%, 100% 13%, 100% 100%, 0 100%);
+}
+
+.project-content {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+}
+
+.project-type {
+  position: absolute;
+  top: 201px;
+  left: 36px;
+  height: 24px;
+  margin: 0;
+  color: var(--orange-soft);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.project-content h3 {
+  position: absolute;
+  top: 230px;
+  left: 36px;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.project-description {
+  position: absolute;
+  top: 268px;
+  left: 36px;
+  width: 310px;
+  height: 62px;
+  margin: 0;
+  color: var(--cream);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+}
+
+.project-buttons {
+  position: absolute;
+  top: 344px;
+  left: 36px;
+  display: flex;
+  gap: 33px;
+}
+
+.project-link {
+  display: flex;
+  width: 146px;
+  height: 52px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: "Manrope", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.project-link:hover {
+  filter: brightness(1.1);
+  transform: translateY(-3px);
+}
+
+.demo-link {
+  color: var(--white);
+  background: linear-gradient(145deg, var(--orange), #b33001);
+}
+
+.github-link {
+  gap: 11px;
+  color: #191919;
+  background: linear-gradient(90deg, #fff, #d2d2d2);
+}
+
+.github-link img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+
+.projects-section .carousel-control {
+  margin-top: 64px;
+}
+
+/* ================================================================
+   EXPERIENCE TIMELINE සහ CV BANNER
+   ================================================================ */
+.experience-section {
+  padding-top: 80px;
+}
+
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 551px);
+  width: 1138px;
+  height: 449px;
+  margin: 48px auto 0;
+  gap: 37px;
+}
+
+.timeline-column {
+  position: relative;
+  display: flex;
+  height: 449px;
+  padding-left: 37px;
+  flex-direction: column;
+  gap: 29px;
+}
+
+.timeline-column::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(var(--orange), #b33001);
+  content: "";
+}
+
+.timeline-card {
+  position: relative;
+  width: 513px;
+  height: 127px;
+  padding: 21px 23px 10px 41px;
+  border-radius: 18px;
+  background: rgba(38, 37, 38, 0.8);
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 55px;
+  left: -45px;
+  width: 13px;
+  height: 13px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.timeline-card h3 {
+  max-width: 310px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeline-card time {
+  position: absolute;
+  top: 28px;
+  right: 23px;
+  color: var(--orange);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.timeline-card p {
+  width: 421px;
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.cv-banner {
+  display: flex;
+  width: 1138px;
+  height: 153px;
+  margin: 44px auto 0;
+  padding: 30px 38px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 23px;
+  background: rgba(41, 41, 41, 0.8);
+}
+
+.cv-banner h3 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px;
+}
+
+.cv-banner p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.cv-buttons {
+  display: flex;
+  gap: 43px;
+}
+
+.small-button {
+  display: grid;
+  width: 146px;
+  height: 43px;
+  place-items: center;
+  border-radius: 12px;
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.small-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-3px);
+}
+
+.small-button-light {
+  color: #191919;
+  background: linear-gradient(90deg, #fff, #d5d5d5);
+}
+
+.small-button-orange {
+  color: var(--white);
+  background: linear-gradient(145deg, var(--orange), #b33001);
+}
+
+/* ================================================================
+   CONTACT CARDS
+   ================================================================ */
+.contact-section {
+  padding-top: 80px;
+}
+
+.contact-section .section-heading > span {
+  display: block;
+  height: 52px;
+  margin-top: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 52px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 293px);
+  width: 1260px;
+  margin: 84px auto 0;
+  gap: 29px;
+}
+
+.contact-card {
+  display: flex;
+  width: 293px;
+  height: 153px;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 23px;
+  background: rgba(41, 41, 41, 0.6);
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.contact-card:hover {
+  background: rgba(64, 62, 64, 0.82);
+  transform: translateY(-7px);
+}
+
+.contact-card img {
+  width: 41px;
+  height: 41px;
+  margin-top: 25px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.contact-card h3 {
+  height: 26px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+.contact-card p {
+  height: 26px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 26px;
+}
+
+/* ================================================================
+   FOOTER
+   Logo, quick links සහ copyright එක reference design එකට ගැළපේ.
+   ================================================================ */
+.footer {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-top: 1px solid rgba(253, 124, 28, 0.66);
+  background: #0d0d10;
+}
+
+.footer::before {
+  display: none;
+}
+
+.footer-content {
+  position: relative;
+  width: 1260px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  position: absolute;
+  top: 55px;
+  left: 0;
+}
+
+.footer-brand > img {
+  width: 112px;
+  height: 56px;
+  overflow: hidden;
+}
+
+.footer-brand h2 {
+  margin: 18px 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.footer-brand p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.footer-links {
+  position: absolute;
+  top: 61px;
+  right: 128px;
+  display: grid;
+  grid-template-columns: 90px 90px;
+  gap: 98px;
+}
+
+.footer-links > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a {
+  color: var(--white);
+  font-family: "Manrope", sans-serif;
+  font-size: 17px;
+  line-height: 24px;
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+
+.footer-links a:hover {
+  color: var(--orange-soft);
+}
+
+.copyright {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  margin: 0;
+  color: var(--muted);
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 650ms ease, transform 850ms var(--spring);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Project URL තවම එක් කර නොමැති button click කළ විට පෙන්වන notification එක. */
+.toast {
+  position: fixed;
+  z-index: 30;
+  right: 24px;
+  bottom: 24px;
+  max-width: min(380px, calc(100vw - 48px));
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 139, 59, 0.24);
+  border-radius: 14px;
+  color: var(--white);
+  background: rgba(25, 25, 27, 0.94);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.36);
+  font-size: 14px;
+  line-height: 21px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  backdrop-filter: blur(18px);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================================
+   ONLINE CV PAGE
+   cv.html සඳහා පමණක් භාවිතා වන styles.
+   ================================================================ */
+.cv-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(253, 124, 28, 0.28), transparent 38%),
+    var(--ink);
+}
+
+.cv-topbar {
+  display: flex;
+  width: min(1138px, calc(100% - 48px));
+  height: 112px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cv-logo {
+  width: 66px;
+  height: 33px;
+  overflow: hidden;
+}
+
+.cv-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv-topbar-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.cv-topbar-actions .small-button {
+  border: 0;
+  cursor: pointer;
+}
+
+.cv-shell {
+  width: min(1138px, calc(100% - 48px));
+  margin: 0 auto 80px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  background: rgba(29, 29, 32, 0.96);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.32);
+}
+
+.cv-intro {
+  position: relative;
+  padding: 64px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cv-intro::after {
+  position: absolute;
+  right: -180px;
+  bottom: -320px;
+  width: 620px;
+  height: 620px;
+  border-radius: 50%;
+  background: rgba(253, 124, 28, 0.4);
+  filter: blur(160px);
+  content: "";
+}
+
+.cv-kicker,
+.cv-label {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--orange-soft);
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 22px;
+  text-transform: uppercase;
+}
+
+.cv-intro h1 {
+  position: relative;
+  z-index: 1;
+  margin: 14px 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(62px, 8vw, 96px);
+  font-weight: 800;
+  letter-spacing: -4px;
+  line-height: 0.92;
+}
+
+.cv-summary {
+  position: relative;
+  z-index: 1;
+  width: min(620px, 100%);
+  margin: 30px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 29px;
+}
+
+.cv-contact-line {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+
+.cv-contact-line a {
+  color: var(--white);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.cv-contact-line a:hover {
+  color: var(--orange-soft);
+}
+
+.cv-columns {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+}
+
+.cv-sidebar {
+  padding: 54px 44px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(18, 18, 22, 0.56);
+}
+
+.cv-block + .cv-block {
+  margin-top: 48px;
+}
+
+.cv-block h2 {
+  margin: 18px 0 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 19px;
+  line-height: 27px;
+}
+
+.cv-block p:not(.cv-label) {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.cv-experience {
+  padding: 54px 54px 64px;
+}
+
+.cv-experience > article {
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cv-experience > article:last-child {
+  border-bottom: 0;
+}
+
+.cv-experience article > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.cv-experience h2 {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.cv-experience time {
+  color: var(--orange);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cv-experience h3 {
+  margin: 9px 0 0;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.cv-experience article p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+/* Online CV එක phone screen සඳහා එක column එකකට මාරු කරයි. */
+@media (max-width: 760px) {
+  .cv-topbar {
+    width: calc(100% - 32px);
+  }
+
+  .cv-topbar-actions .small-button:first-child {
+    display: none;
+  }
+
+  .cv-shell {
+    width: calc(100% - 28px);
+    border-radius: 22px;
+  }
+
+  .cv-intro {
+    padding: 42px 28px;
+  }
+
+  .cv-intro h1 {
+    font-size: 56px;
+    letter-spacing: -2px;
+  }
+
+  .cv-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-sidebar {
+    padding: 42px 28px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .cv-experience {
+    padding: 42px 28px 52px;
+  }
+
+  .cv-experience article > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* CV එක Print / Save PDF කරන විට අනවශ්‍ය top bar එක සඟවයි. */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .cv-page {
+    background: var(--ink) !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .cv-topbar {
+    display: none;
+  }
+
+  .cv-shell {
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* කුඩා laptop screen වල cards screen එකෙන් පිට නොයන ලෙස සකස් කරයි. */
+@media (min-width: 1200px) and (max-width: 1359px) {
+  .project-track {
+    width: calc(100% - 48px);
+    padding: 0 24px;
+    overflow-x: auto;
+    scroll-padding-inline: 24px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .project-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-card {
+    scroll-snap-align: center;
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: calc(100% - 48px);
+    gap: 20px;
+  }
+
+  .contact-card {
+    width: 100%;
+  }
+
+  .footer-content {
+    width: calc(100% - 96px);
+  }
+}
+
+/* Tablet සහ mobile වල desktop navigation එක compact menu එකකට මාරු වේ. */
+@media (max-width: 1199px) {
+  .site-header {
+    height: 78px;
+  }
+
+  .site-header-inner {
+    width: calc(100% - 48px);
+  }
+
+  .hero {
+    height: 900px;
+  }
+
+  .hero-stage {
+    position: static;
+    width: auto;
+    height: auto;
+    transform: none;
+  }
+
+  .hero-brand {
+    top: 24px;
+    left: 0;
+    width: 60px;
+    height: 30px;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    z-index: 11;
+    top: 18px;
+    right: 0;
+    display: grid;
+    width: 46px;
+    height: 42px;
+    padding: 0;
+    place-content: center;
+    grid-template-columns: repeat(2, 8px);
+    grid-auto-rows: 8px;
+    gap: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 11px;
+    background: rgba(41, 41, 41, 0.72);
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--white);
+    border-radius: 2px;
+    background: transparent;
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  /* Menu එක open වූ විට කොටු හතර X icon එකක් බවට මාරු වේ. */
+  .menu-toggle::before,
+  .menu-toggle::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--white);
+    content: "";
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .site-header.menu-open .menu-toggle span {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+
+  .site-header.menu-open .menu-toggle::before {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .site-header.menu-open .menu-toggle::after {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .hero-nav {
+    position: absolute;
+    z-index: 10;
+    top: 86px;
+    left: -8px;
+    right: -8px;
+    display: flex;
+    width: auto;
+    height: auto;
+    padding: 14px;
+    flex-direction: column;
+    gap: 8px;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(18, 18, 22, 0.96);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-16px);
+  }
+
+  .hero-nav a {
+    flex: 0 0 48px;
+    width: 100%;
+    height: 48px;
+  }
+
+  .site-header.is-loaded .hero-nav {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-16px);
+  }
+
+  .site-header.is-loaded.menu-open .hero-nav {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .hero-contact {
+    display: none;
+  }
+
+  .hero-profile {
+    top: 105px;
+    left: 50%;
+    width: 630px;
+    height: auto;
+    transform: translate(-50%, 200px);
+  }
+
+  .hero.is-loaded .hero-profile {
+    transform: translate(-50%, 0);
+  }
+
+  .hero-title {
+    top: 378px;
+    left: 6vw;
+  }
+
+  .hero-copy {
+    top: 400px;
+    right: 6vw;
+    width: 36vw;
+  }
+
+  .hero-copy > p {
+    font-size: 20px;
+    line-height: 29px;
+  }
+
+  .hero-actions {
+    gap: 14px;
+  }
+
+  .button {
+    width: 160px;
+    font-size: 19px;
+  }
+
+  .hero-name {
+    top: 700px;
+    left: 4vw;
+    width: 92vw;
+    font-size: 18vw;
+  }
+
+  .about-section,
+  .skills-section,
+  .projects-section,
+  .experience-section,
+  .contact-section {
+    height: auto;
+    min-height: 0;
+    padding: 96px 24px;
+  }
+
+  .about-content {
+    width: min(100%, 920px);
+    padding-top: 0;
+  }
+
+  .about-copy {
+    width: 100%;
+    height: auto;
+    margin-top: 54px;
+  }
+
+  .education-card,
+  .certificate-track {
+    width: 100%;
+  }
+
+  .certificate-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .certificate-card h3 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .certificate-card p {
+    white-space: normal;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    width: 100%;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .tool-marquee {
+    width: calc(100vw - 48px);
+    margin-top: 80px;
+  }
+
+  .tool-marquee-track {
+    padding: 0 32px;
+    gap: 48px;
+  }
+
+  .tool-set {
+    gap: 48px;
+  }
+
+  .tool-chip {
+    flex-basis: 82px;
+    width: 82px;
+    height: 82px;
+  }
+
+  .project-track {
+    width: min(100%, 900px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .project-track::-webkit-scrollbar,
+  .certificate-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-card {
+    scroll-snap-align: center;
+  }
+
+  .projects-section .carousel-control {
+    margin-top: 54px;
+  }
+
+  .timeline-grid,
+  .cv-banner,
+  .contact-grid {
+    width: min(100%, 920px);
+  }
+
+  .timeline-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: auto;
+    gap: 28px;
+  }
+
+  .timeline-card {
+    width: 100%;
+  }
+
+  .timeline-card p {
+    width: 100%;
+    padding-right: 12px;
+  }
+
+  .timeline-card h3 {
+    max-width: 58%;
+  }
+
+  .cv-banner {
+    height: auto;
+    margin-top: 48px;
+    gap: 24px;
+  }
+
+  .cv-banner h3 {
+    font-size: 30px;
+  }
+
+  .cv-buttons {
+    gap: 14px;
+  }
+
+  .contact-section .section-heading > span {
+    height: auto;
+    margin-top: 8px;
+    line-height: 26px;
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(2, 293px);
+    justify-content: center;
+    margin-top: 64px;
+  }
+
+  .footer {
+    height: auto;
+    min-height: 340px;
+    padding: 54px 24px 30px;
+  }
+
+  .footer-content {
+    display: grid;
+    width: min(100%, 920px);
+    height: auto;
+    min-height: 270px;
+    grid-template-columns: 1fr auto;
+    margin: 0 auto;
+  }
+
+  .footer-brand,
+  .footer-links,
+  .copyright {
+    position: static;
+  }
+
+  .footer-links {
+    align-self: start;
+  }
+
+  .copyright {
+    grid-column: 1 / -1;
+    margin-top: 54px;
+    text-align: center;
+    transform: none;
+  }
+}
+
+/* 768–899px portrait tablets වල hero title සහ description එක එකිනෙකට නොගැටෙන ලෙස වෙන් කරයි. */
+@media (min-width: 768px) and (max-width: 899px) {
+  .hero-title {
+    top: 390px;
+    left: 4vw;
+    width: 45vw;
+  }
+
+  .hero-title h1 {
+    font-size: clamp(35px, 4.5vw, 40px);
+    line-height: 1.14;
+  }
+
+  .hero-copy {
+    top: 404px;
+    right: 4vw;
+    width: 34vw;
+  }
+
+  .hero-copy > p {
+    font-size: 17px;
+    line-height: 25px;
+  }
+
+  .hero-actions {
+    margin-top: 22px;
+    gap: 10px;
+  }
+
+  .button {
+    width: min(15vw, 140px);
+    height: 50px;
+    font-size: 16px;
+  }
+}
+
+/* ================================================================
+   MOBILE LAYOUT
+   ලබා දුන් mobile UI reference එකේ අනුපාතයට hero එක නැවත සකස් කරයි.
+   Desktop hero animation classes වෙනස් නොකර position සහ size පමණක් වෙනස් කර ඇත.
+   ================================================================ */
+@media (max-width: 767px) {
+  html {
+    scroll-padding-top: 66px;
+  }
+
+  /* Mobile header එකේ logo සහ four-square menu icon එක පමණක් පෙන්වයි. */
+  .site-header {
+    height: 52px;
+    border-top: 0;
+    background: linear-gradient(180deg, rgba(18, 16, 20, 0.98), rgba(28, 15, 18, 0.9));
+    box-shadow: none;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .site-header.is-scrolled {
+    background: rgba(18, 18, 22, 0.97);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+  }
+
+  .site-header-inner {
+    width: min(calc(100% - 30px), 430px);
+  }
+
+  .hero-brand {
+    top: 15px;
+    width: 44px;
+    height: 22px;
+  }
+
+  .menu-toggle {
+    top: 8px;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .hero-nav {
+    top: 60px;
+    left: 0;
+    right: 0;
+    border-radius: 14px;
+  }
+
+  .hero {
+    height: clamp(760px, 222.73vw, 960px);
+    background:
+      radial-gradient(circle at 50% 102%, rgba(255, 145, 36, 0.98) 0 10%, rgba(255, 55, 4, 0.9) 34%, rgba(129, 21, 12, 0.68) 63%, rgba(18, 18, 22, 0) 88%),
+      linear-gradient(180deg, #121216 0%, #301417 30%, #74170f 52%, #d92307 72%, #ff5c05 100%);
+  }
+
+  .hero-stage {
+    height: 100%;
+  }
+
+  .hero-aurora {
+    z-index: 0;
+    top: 40%;
+    left: 50%;
+    width: min(150vw, 650px);
+    height: 62%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 173, 46, 0.58), rgba(255, 49, 4, 0.32) 48%, rgba(183, 16, 1, 0) 76%);
+    filter: blur(48px);
+    opacity: 0.72;
+    transform: translateX(-50%);
+  }
+
+  /* Image එක reference එකේ වගේ hero එකේ පහළ භාගයෙන් ආරම්භ වේ. */
+  .hero-profile {
+    top: clamp(390px, 110vw, 474px);
+    width: min(100vw, 430px);
+    max-width: none;
+  }
+
+  /* Heading එක mobile screen එකේ ඉහළ වම් පැත්තට ගෙන එයි. */
+  .hero-title {
+    top: clamp(82px, 25.25vw, 108px);
+    left: max(18px, calc(50% - 215px));
+    width: min(calc(100% - 36px), 430px);
+  }
+
+  .hero-pill {
+    display: none;
+  }
+
+  .hero-title h1 {
+    font-size: clamp(27px, 8.7vw, 36px);
+    letter-spacing: -0.7px;
+    line-height: 1.13;
+  }
+
+  .hero-title h1 span:first-of-type {
+    color: #aaa0a0;
+  }
+
+  .hero-title h1 span:last-child {
+    color: var(--white);
+  }
+
+  /* Description සහ buttons heading එකට පහළින් තැබේ. */
+  .hero-copy {
+    top: clamp(205px, 60vw, 258px);
+    right: auto;
+    left: max(18px, calc(50% - 215px));
+    width: min(calc(100% - 36px), 430px);
+  }
+
+  .hero-copy > p {
+    height: auto;
+    max-width: 320px;
+    color: #c7bebe;
+    font-size: clamp(14px, 4.1vw, 16px);
+    line-height: 1.22;
+  }
+
+  .hero-actions {
+    width: min(100%, 320px);
+    margin-top: clamp(26px, 8.8vw, 38px);
+    gap: clamp(12px, 5vw, 20px);
+  }
+
+  .button {
+    width: auto;
+    height: 48px;
+    flex: 1;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  /* නම photo එකේ පහළින් overlay කර reference composition එක සම්පූර්ණ කරයි. */
+  .hero-name {
+    top: auto;
+    right: auto;
+    bottom: clamp(12px, 5vw, 22px);
+    left: max(15px, calc(50% - 200px));
+    width: min(calc(100% - 30px), 400px);
+    height: auto;
+    color: var(--white);
+    background: none;
+    font-size: clamp(56px, 17.8vw, 76px);
+    letter-spacing: -2.4px;
+    line-height: 1;
+  }
+
+  .about-section,
+  .skills-section,
+  .projects-section,
+  .experience-section,
+  .contact-section {
+    padding: 78px 18px;
+  }
+
+  .section-heading > p {
+    height: 28px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .section-heading > h2 {
+    height: auto;
+    margin-top: 4px;
+    font-size: clamp(31px, 9vw, 40px);
+    line-height: 1.18;
+  }
+
+  .about-copy {
+    margin-top: 42px;
+    font-size: 17px;
+    line-height: 28px;
+  }
+
+  .education-card {
+    height: auto;
+    min-height: 141px;
+    margin-top: 46px;
+    padding: 24px;
+    align-items: flex-start;
+  }
+
+  .education-icon {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+    margin-right: 18px;
+  }
+
+  .education-icon img {
+    width: 43px;
+    height: 43px;
+  }
+
+  .education-card h3 {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .education-card p {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .certificate-track {
+    display: flex;
+    margin-top: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+  }
+
+  .certificate-card {
+    flex: 0 0 min(88vw, 420px);
+    scroll-snap-align: center;
+  }
+
+  .skills-grid {
+    display: flex;
+    margin-top: 56px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .skill-card {
+    width: min(100%, 330px);
+  }
+
+  .tool-marquee {
+    width: 100vw;
+    margin-left: -18px;
+    margin-top: 64px;
+  }
+
+  .tool-marquee-track {
+    padding: 0 24px;
+    gap: 28px;
+  }
+
+  .tool-set {
+    gap: 28px;
+  }
+
+  .tool-chip {
+    flex-basis: 74px;
+    width: 74px;
+    height: 74px;
+  }
+
+  .tool-chip img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .project-track {
+    width: calc(100vw - 36px);
+    margin-top: 56px;
+    gap: 18px;
+  }
+
+  .project-card {
+    display: flex;
+    flex-basis: min(400px, calc(100vw - 52px));
+    width: min(400px, calc(100vw - 52px));
+    height: auto;
+    min-height: 0;
+    padding: 10px;
+    flex-direction: column;
+    transform-origin: top left;
+  }
+
+  .project-image {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: min(237px, calc((100vw - 72px) * 0.624));
+    flex: 0 0 auto;
+    border-radius: 31px 31px 0 0;
+  }
+
+  .project-panel {
+    display: none;
+  }
+
+  .project-content {
+    position: relative;
+    inset: auto;
+    display: flex;
+    min-height: 250px;
+    margin-top: -29px;
+    padding: 45px 26px 20px;
+    flex-direction: column;
+    border-radius: 0 0 31px 31px;
+    background: #161616;
+    clip-path: polygon(0 0, 51% 0, 62% 29px, 100% 29px, 100% 100%, 0 100%);
+  }
+
+  .project-type,
+  .project-content h3,
+  .project-description,
+  .project-buttons {
+    position: static;
+  }
+
+  .project-type {
+    height: auto;
+  }
+
+  .project-content h3 {
+    max-width: 100%;
+    margin-top: 2px;
+    font-size: 20px;
+    line-height: 27px;
+  }
+
+  .project-description {
+    width: auto;
+    height: auto;
+    margin-top: 8px;
+  }
+
+  .project-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    margin-top: auto;
+    padding-top: 24px;
+    gap: 12px;
+  }
+
+  .project-link {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .timeline-grid {
+    grid-template-columns: 1fr;
+    margin-top: 46px;
+    gap: 38px;
+  }
+
+  .timeline-column {
+    width: 100%;
+    padding-left: 25px;
+  }
+
+  .timeline-card {
+    height: auto;
+    min-height: 127px;
+    padding: 20px 18px 18px 22px;
+  }
+
+  .timeline-dot {
+    left: -33px;
+  }
+
+  .timeline-card h3 {
+    max-width: 64%;
+    font-size: 18px;
+  }
+
+  .timeline-card time {
+    top: 22px;
+    right: 16px;
+    font-size: 12px;
+  }
+
+  .timeline-card p {
+    font-size: 13px;
+  }
+
+  .cv-banner {
+    padding: 26px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cv-banner h3 {
+    font-size: 26px;
+    line-height: 34px;
+  }
+
+  .cv-banner p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .cv-buttons {
+    width: 100%;
+  }
+
+  .small-button {
+    flex: 1;
+  }
+
+  .contact-grid {
+    grid-template-columns: minmax(0, 293px);
+    margin-top: 54px;
+    gap: 18px;
+  }
+
+  .contact-card {
+    width: 100%;
+  }
+
+  .footer {
+    min-height: 440px;
+    padding-top: 48px;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-links {
+    margin-top: 40px;
+    gap: 62px;
+    text-align: left;
+  }
+
+  .footer-links a {
+    font-size: 17px;
+  }
+
+  .copyright {
+    margin-top: 40px;
+    font-size: 13px;
+    white-space: normal;
+  }
+}
+
+/* ඉතා කුඩා 320–360px screens සඳහා අකුරු සහ buttons තව ටිකක් සකස් කරයි. */
+@media (max-width: 360px) {
+  .project-content {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .project-link {
+    font-size: 12px;
+  }
+}
+
+/* Device එකේ Reduce Motion on කර ඇති අයට animations අවම කරයි. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
