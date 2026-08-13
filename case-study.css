@@ -7,3 +7,69 @@
 .screen-card{display:flex!important;flex-direction:column;gap:0}.screen-frame{position:relative;overflow:hidden;border:1px solid rgba(216,213,255,.18);border-radius:32px;background:#0f0f12;box-shadow:0 28px 65px rgba(0,0,0,.3);transition:transform .28s ease,box-shadow .28s ease}.screen-frame::after{position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);content:"";pointer-events:none}.screen-frame img{display:block;width:100%;height:auto;aspect-ratio:402/874;object-fit:cover}.screen-card:hover .screen-frame{transform:translateY(-8px);box-shadow:0 38px 80px rgba(0,0,0,.42)}.screen-card figcaption{display:grid!important;grid-template-columns:auto 1fr;gap:3px 10px;padding:18px 7px 0!important;text-align:left!important}.screen-card figcaption b{grid-row:1/3;color:#fd7c1c;font-family:"Manrope",sans-serif;font-size:12px;letter-spacing:1px}.screen-card figcaption span{color:#fff;font-family:"Manrope",sans-serif;font-size:17px;font-weight:700}.screen-card figcaption small{color:#858589;font-size:12px;line-height:1.55}.screen-grid{align-items:start}
 @media(max-width:900px){.screen-frame{border-radius:26px}.screen-card figcaption{padding-top:14px!important}}
 @media(max-width:560px){.case-showcase .case-shell{width:min(calc(100% - 24px),420px)}.screen-grid{display:flex!important;margin:0 -12px;padding:0 12px 18px;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.screen-grid::-webkit-scrollbar{display:none}.screen-card{flex:0 0 min(82vw,330px);scroll-snap-align:center}.screen-frame{border-radius:30px}.screen-card figcaption{padding-left:5px!important;padding-right:5px!important}}
+
+
+/* =========================================================
+   NEXUS CASE STUDY — desktop web screen overrides
+   Keeps the exact visual language of the My UniID case study.
+   ========================================================= */
+.nexus-case .case-cover-wrap img{
+  aspect-ratio:16/10;
+  object-fit:cover;
+  object-position:top;
+}
+.nexus-case .swatch-a{background:#090d13}
+.nexus-case .swatch-b{background:#102b3d}
+.nexus-case .swatch-c{background:#00d9ee}
+.nexus-case .swatch-d{background:#bd00ff}
+
+.nexus-case .screen-grid{
+  grid-template-columns:repeat(2,1fr);
+  gap:34px 28px;
+}
+.nexus-case .screen-frame{
+  border-radius:24px;
+  background:#0b0d12;
+}
+.nexus-case .screen-frame img{
+  width:100%;
+  height:auto;
+  aspect-ratio:auto;
+  object-fit:contain;
+  object-position:top;
+}
+.nexus-case .screen-card:hover .screen-frame{
+  transform:translateY(-8px);
+  box-shadow:0 38px 80px rgba(0,0,0,.42);
+}
+.nexus-case .screen-card figcaption{
+  grid-template-columns:auto 1fr;
+}
+.nexus-case .screen-card figcaption b{color:#fd7c1c}
+
+.nexus-case .case-wide-screen{
+  grid-column:1/-1;
+}
+.nexus-case .case-wide-screen .screen-frame img{
+  max-height:none;
+}
+
+@media(max-width:900px){
+  .nexus-case .screen-grid{grid-template-columns:1fr}
+  .nexus-case .case-wide-screen{grid-column:auto}
+}
+@media(max-width:560px){
+  .nexus-case .screen-grid{
+    display:grid!important;
+    margin:0;
+    padding:0;
+    overflow:visible;
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .nexus-case .screen-card{
+    flex:auto;
+    width:100%;
+  }
+  .nexus-case .screen-frame{border-radius:22px}
+}
